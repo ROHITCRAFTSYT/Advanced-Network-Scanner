@@ -31,8 +31,8 @@ To run this script, you need:
 
 1.  **Clone the repository:**
     ```bash
-    git clone [REPO_URL_PLACEHOLDER]
-    cd [REPO_NAME_PLACEHOLDER]
+    git clone https://github.com/ROHITCRAFTSYT/Advanced-Network-Scanner.git
+    cd Advanced-Network-Scanner
     ```
 
 2.  **Install dependencies:**
