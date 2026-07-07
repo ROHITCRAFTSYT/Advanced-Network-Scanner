@@ -48,7 +48,7 @@ def get_public_ip():
     try:
         response = urllib.request.urlopen('https://api.ipify.org', timeout=3)
         return response.read().decode('utf-8')
-    except:
+    except Exception:
         return "Unknown"
 
 def get_network_interfaces():
@@ -67,7 +67,7 @@ def get_network_interfaces():
         
         interfaces_text = result.stdout
         return interfaces_text[:500]  # First 500 chars
-    except:
+    except Exception:
         return "Unable to fetch"
 
 def refresh_arp_table(ip):
@@ -80,7 +80,7 @@ def refresh_arp_table(ip):
                       stderr=subprocess.DEVNULL,
                       timeout=2,
                       creationflags=flags)
-    except:
+    except Exception:
         pass
 
 def get_mac_address_windows(ip):
@@ -101,7 +101,7 @@ def get_mac_address_windows(ip):
                 if mac_match:
                     mac = mac_match.group(0).replace('-', ':').upper()
                     return mac
-    except:
+    except Exception:
         pass
     
     # Method 2: getmac command
@@ -118,7 +118,7 @@ def get_mac_address_windows(ip):
                 if mac_match:
                     mac = mac_match.group(0).replace('-', ':').upper()
                     return mac
-    except:
+    except Exception:
         pass
     
     # Method 3: nbtstat (for Windows devices)
@@ -133,7 +133,7 @@ def get_mac_address_windows(ip):
         if mac_match:
             mac = mac_match.group(0).split('=')[1].strip().replace('-', ':')
             return mac
-    except:
+    except Exception:
         pass
     
     return mac
@@ -156,7 +156,7 @@ def get_mac_address(ip):
                     mac_match = re.search(r'([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}', line)
                     if mac_match:
                         return mac_match.group(0).upper()
-        except:
+        except Exception:
             pass
     
     return "Unknown"
@@ -254,7 +254,7 @@ def get_hostname(ip):
     
     try:
         hostname, _, _ = socket.gethostbyaddr(ip)
-    except:
+    except Exception:
         pass
     
     # Attempt to get workgroup/domain (Windows specific)
@@ -270,7 +270,7 @@ def get_hostname(ip):
                 if 'Workgroup' in line or 'Domain' in line:
                     workgroup = line.split()[-1].strip()
                     break
-        except:
+        except Exception:
             pass
             
     return hostname, workgroup
@@ -288,7 +288,7 @@ def scan_port(ip, port, timeout=0.5):
             return {'port': port, 'status': 'open', 'service': service}
         else:
             return None
-    except:
+    except Exception:
         return None
 
 def scan_ports_enhanced(ip, quick=True):
@@ -355,7 +355,7 @@ def get_banner(ip, port, timeout=1):
         # Receive banner
         try:
             raw_banner = sock.recv(2048).decode('utf-8', errors='ignore').strip()
-        except:
+        except Exception:
             raw_banner = ""
         
         sock.close()
@@ -370,7 +370,7 @@ def get_banner(ip, port, timeout=1):
             return banner, version
         
         return "No banner", "Unknown"
-    except:
+    except Exception:
         return "No banner", "Unknown"
 
 def extract_version(banner, port):
@@ -433,7 +433,7 @@ def get_http_info(ip, port=80):
             'powered_by': powered_by,
             'status': response.status
         }
-    except:
+    except Exception:
         return None
 
 def get_device_type_enhanced(hostname, mac, vendor, open_ports, os_guess):
@@ -1160,7 +1160,7 @@ def ping_host_detailed(ip):
             return False, "N/A", 0, "100%"
     except subprocess.TimeoutExpired:
         return False, "Timeout", 0, "100%"
-    except:
+    except Exception:
         return False, "Error", 0, "100%"
 
 def main():
